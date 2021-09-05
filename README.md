@@ -15,12 +15,13 @@ Demo available at [apex.oracle.com](https://apex.oracle.com/pls/apex/jari/r/tran
 
 ### Report Name Translation
 
-Translations are stored to [text messages](https://docs.oracle.com/en/database/oracle/application-express/21.1/htmdb/translating-messages.html#GUID-3557FD3D-EC89-4F18-91B7-E8E304459266). Text message name consists of prefix *IR_REPORT_ALIAS_* and report alias like *IR_REPORT_ALIAS_345678*.
+Translations of report names should be saved in [text messages](https://docs.oracle.com/en/database/oracle/application-express/21.1/htmdb/translating-messages.html#GUID-3557FD3D-EC89-4F18-91B7-E8E304459266). The name of the text message consists of the prefix *IR_REPORT_ALIAS_* and the report alias, for example *IR_REPORT_ALIAS_345678*.
 
-You can create text messages running below PL/SQL block and then translate message using APEX builder.
+To create text messages for all IR saved alternative reports in application, run the below PL/SQL block. Then translate created messages with the APEX builder.
 
 ```sql
 declare
+  /* Change application id and language code for your needs */
   /* Application id */
   l_app_id      number        := 100;
   /* Language code */
