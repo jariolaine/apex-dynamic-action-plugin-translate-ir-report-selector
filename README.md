@@ -3,7 +3,7 @@
 ![](https://img.shields.io/badge/Oracle_Database-18c-blue.svg)
 ![](https://img.shields.io/badge/APEX-21.1-success.svg)
 
-Translate the names of IR and/or IG saved alternative reports using text messages.
+Translate the names of Interactive Report and Interactive Grid saved alternative reports using text messages.
 
 Demo available at [apex.oracle.com](https://apex.oracle.com/pls/apex/jari/r/translate-ir-report-selector-plug-in-demo/home)
 
@@ -19,25 +19,27 @@ Translations of report names should be saved in [text messages](https://docs.ora
 
 #### Seed Text Messages
 
-To seed text messages for all IR and IG saved alternative reports in application, run the PL/SQL script [seed_text_messages.sql](APEX/Script/seed_text_messages.sql). Then translate created messages with the APEX builder.
+To seed text messages for all Interactive Report and Interactive Grid saved alternative reports in application, run the PL/SQL script [seed_text_messages.sql](APEX/Script/seed_text_messages.sql). Then translate created messages with the APEX builder.
 
-### Dynamic Action for IR
+### Dynamic Action for Interactive Report
 
-Create dynamic action
 - **Event**: After Refresh
 - **Selection Type**: Region
 - **Region**: *select yout interactive report region*
 - **Action**: Translate IR/IG Report Selector [Plug-In]
 - **Fire on Initialization**: On
 
-### Dynamic Action for IG
+### Dynamic Action for Interactive Grid
 
-Create dynamic action
 - **Event**: Selection Change [interactive Grid]
 - **Selection Type**: Region
 - **Region**: *select yout interactive grid region*
 - **Action**: Translate IR/IG Report Selector [Plug-In]
 - **Fire on Initialization**: On
+
+## Known Issues
+
+When e.g. apply freeze columns to Interactive Grid report selector displays original report names.
 
 ## License
 
