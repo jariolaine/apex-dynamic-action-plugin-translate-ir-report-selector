@@ -26,20 +26,15 @@ To seed text messages for all Interactive Report and Interactive Grid saved alte
 - **Event**: After Refresh
 - **Selection Type**: Region
 - **Region**: *select yout interactive report region*
-- **Action**: Translate IR/IG Report Selector [Plug-In]
-- **Fire on Initialization**: On
+  - **Action**: Translate IR/IG Report Selector [Plug-In]
+  - **Fire on Initialization**: On
 
 ### Dynamic Action for Interactive Grid
 
-- **Event**: Selection Change [interactive Grid]
-- **Selection Type**: Region
-- **Region**: *select yout interactive grid region*
-- **Action**: Translate IR/IG Report Selector [Plug-In]
-- **Fire on Initialization**: On
-
-## Known Issues
-
-When e.g. apply freeze columns to Interactive Grid report selector displays original report names.
+- **Event**: Page Load
+  - **Action**: Translate IR/IG Report Selector [Plug-In]
+  - **Selection Type**: Region
+  - **Region**: *select yout interactive grid region*
 
 ## License
 
