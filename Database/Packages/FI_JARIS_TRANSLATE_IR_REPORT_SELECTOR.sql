@@ -76,6 +76,10 @@ as
       and ig.application_id = p_app_id
       and ig.page_id = p_app_page_id
       and ig.region_id = p_region_id
+      and (
+        ig.session_id = sys_context( 'APEX$SESSION', 'APP_SESSION' )
+        or session_id is null
+      )
       and msg.application_id = p_app_id
       and msg.language_code = p_lang
     group by p_region_static_id

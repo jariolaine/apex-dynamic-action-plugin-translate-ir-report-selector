@@ -36,6 +36,10 @@ To seed text messages for all Interactive Report and Interactive Grid saved alte
   - **Selection Type**: Region
   - **Region**: *select yout interactive grid region*
 
+## Known Issues
+
+Interactive grid report name translations are fetch always from database. It causes a delay before the selector report names change. As a result, users will see the original report names for a short time.
+
 ## License
 
 This code is released under [MIT license](https://github.com/jariolaine/apex-dynamic-action-plugin-translate-ir-report-selector/blob/master/LICENSE) by Jari Laine.
