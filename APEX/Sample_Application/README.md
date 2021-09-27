@@ -1,5 +1,10 @@
 # Sample Application
 
+![](https://img.shields.io/badge/Oracle_Database-18c-blue.svg)
+![](https://img.shields.io/badge/APEX-21.1-success.svg)
+
+Plug-in "Translate IR/IG Report Selector" sample application
+
 ## Install
 
 ### System Requirements

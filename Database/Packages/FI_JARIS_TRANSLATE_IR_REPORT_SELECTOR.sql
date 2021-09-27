@@ -10,6 +10,7 @@ as
 --  MODIFIED (DD.MM.YYYY)
 --    Jari Laine 02.09.2021 - Created
 --    Jari Laine 24.09.2021 - Support for IG
+--    Jari Laine 25.09.2021 - Minor changes
 --
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -50,7 +51,10 @@ as
     p_ajax_identifier   in varchar2 default null
   ) return clob
   as
+
     l_options clob;
+    l_session number := sys_context( 'APEX$SESSION', 'APP_SESSION' );
+
   begin
 
     select
@@ -77,7 +81,7 @@ as
       and ig.page_id = p_app_page_id
       and ig.region_id = p_region_id
       and (
-        ig.session_id = sys_context( 'APEX$SESSION', 'APP_SESSION' )
+        ig.session_id = l_session
         or session_id is null
       )
       and msg.application_id = p_app_id
@@ -102,15 +106,16 @@ as
   return apex_plugin.t_dynamic_action_render_result
   as
 
-    l_options           clob;
-    l_result            apex_plugin.t_dynamic_action_render_result;
+
     l_ir_mesg_prefix    p_plugin.attribute_01%type                        := p_plugin.attribute_01;
     l_ig_mesg_prefix    p_plugin.attribute_02%type                        := p_plugin.attribute_02;
     l_app_id            apex_application_page_regions.application_id%type := apex_application.g_flow_id;
     l_app_page_id       apex_application_page_regions.page_id%type        := apex_application.g_flow_step_id;
     l_lang              apex_application_translations.language_code%type  := apex_application.g_browser_language;
 
+    l_options           clob;
     l_ajax_identifier   varchar2(1000);
+    l_result            apex_plugin.t_dynamic_action_render_result;
     l_region_id         apex_application_page_regions.region_id%type;
     l_region_static_id  apex_application_page_regions.static_id%type;
     l_region_type       apex_application_page_regions.source_type_plugin_name%type;
@@ -151,18 +156,17 @@ as
         )
       ;
 
+      if l_region_static_id is null
+      then
+        l_region_static_id := 'R' || l_region_id;
+      end if;
+
       apex_debug.info(
         'Region type: %s, id: %s, static id %s'
         ,l_region_type
         ,l_region_id
         ,l_region_static_id
       );
-
-      if l_region_static_id is null
-      then
-        l_region_static_id := 'R' || l_region_id;
-        apex_debug.info( 'Fetch data using region static id' );
-      end if;
 
       -- building the json object for translated IR saved report names
       if l_region_type = 'NATIVE_IR'
@@ -229,7 +233,7 @@ as
     end if;
 
     apex_debug.info(
-      'json object generated for JavaDcript options: %s'
+      'json object generated for JavaScript options: %s'
       ,l_options
     );
 
@@ -247,13 +251,14 @@ as
     p_plugin         in apex_plugin.t_plugin
   ) return apex_plugin.t_dynamic_action_ajax_result
   as
-    l_options           clob;
-    l_result            apex_plugin.t_dynamic_action_ajax_result;
+
     l_ig_mesg_prefix    p_plugin.attribute_02%type                        := p_plugin.attribute_02;
     l_app_id            apex_application_page_regions.application_id%type := apex_application.g_flow_id;
     l_app_page_id       apex_application_page_regions.page_id%type        := apex_application.g_flow_step_id;
     l_lang              apex_application_translations.language_code%type  := apex_application.g_browser_language;
 
+    l_options           clob;
+    l_result            apex_plugin.t_dynamic_action_ajax_result;
     l_region_id         apex_application_page_regions.region_id%type;
     l_region_static_id  apex_application_page_regions.static_id%type;
 
@@ -274,16 +279,17 @@ as
       ,p_dynamic_action.affected_region_id
     );
 
+    -- get region id from ajax call
     l_region_static_id := apex_application.g_x01;
 
-    if l_region_static_id is null
-    then
-      l_region_static_id := 'R' || l_region_id;
-      apex_debug.info( 'Fetch data using region static id' );
-    end if;
+    apex_debug.info(
+      'Region type: %s, id: %s, static id %s'
+      ,'NATIVE_IG'
+      ,l_region_id
+      ,l_region_static_id
+    );
 
     -- building the json object for translated IR saved report names
-
       l_options := get_ig_reports(
         p_app_id            => l_app_id
         ,p_app_page_id      => l_app_page_id
@@ -291,6 +297,8 @@ as
         ,p_mesg_prefix      => l_ig_mesg_prefix
         ,p_region_id        => l_region_id
         ,p_region_static_id => l_region_static_id
+        -- just for JavaScript debug
+        ,p_region_type      => 'NATIVE_IG'
       );
 
     if l_options is null
@@ -299,15 +307,12 @@ as
     end if;
 
     apex_debug.info(
-      'json object generated for JavaDcript options: %s'
+      'json object generated for JavaScript options: %s'
       ,l_options
     );
 
-    -- Write header for the output
-    sys.owa_util.mime_header('application/json', false);
-    sys.htp.p('Cache-Control: no-cache');
-    sys.htp.p('Pragma: no-cache');
-    sys.owa_util.http_header_close;
+    -- Write header for the JSON stream.
+    apex_plugin_util.print_json_http_header;
     -- Write output
     sys.htp.prn( l_options );
 
