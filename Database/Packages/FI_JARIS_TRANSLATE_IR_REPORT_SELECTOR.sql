@@ -49,10 +49,10 @@ as
     p_region_static_id  in varchar2,
     p_region_type       in varchar2 default null,
     p_ajax_identifier   in varchar2 default null
-  ) return clob
+  ) return varchar2
   as
 
-    l_options clob;
+    l_options varchar2(32672);
     l_session number := sys_context( 'APEX$SESSION', 'APP_SESSION' );
 
   begin
@@ -70,7 +70,6 @@ as
             )
           )
         )
-        returning clob
       ) as json_obj
     into l_options
     from apex_appl_page_ig_rpts ig
@@ -82,7 +81,7 @@ as
       and ig.region_id = p_region_id
       and (
         ig.session_id = l_session
-        or session_id is null
+        or ig.session_id is null
       )
       and msg.application_id = p_app_id
       and msg.language_code = p_lang
@@ -113,7 +112,7 @@ as
     l_app_page_id       apex_application_page_regions.page_id%type        := apex_application.g_flow_step_id;
     l_lang              apex_application_translations.language_code%type  := apex_application.g_browser_language;
 
-    l_options           clob;
+    l_options           varchar2(32672);
     l_ajax_identifier   varchar2(1000);
     l_result            apex_plugin.t_dynamic_action_render_result;
     l_region_id         apex_application_page_regions.region_id%type;
@@ -184,7 +183,6 @@ as
                 )
               )
             )
-            returning clob
           ) as json_obj
         into l_options
         from apex_application_page_ir_rpt ir
@@ -237,8 +235,8 @@ as
       ,l_options
     );
 
-    l_result.javascript_function
-      := 'function(){translateIrReportNames( ' || l_options || ');}';
+    l_result.javascript_function :=
+      'function(){translateIrReportNames( ' || l_options || ');}';
 
     -- all done, return l_result containing the javascript function
     return l_result;
@@ -257,7 +255,7 @@ as
     l_app_page_id       apex_application_page_regions.page_id%type        := apex_application.g_flow_step_id;
     l_lang              apex_application_translations.language_code%type  := apex_application.g_browser_language;
 
-    l_options           clob;
+    l_options           varchar2(32672);
     l_result            apex_plugin.t_dynamic_action_ajax_result;
     l_region_id         apex_application_page_regions.region_id%type;
     l_region_static_id  apex_application_page_regions.static_id%type;

@@ -28,9 +28,11 @@ function translateIrReportNames( p_options ){
         // report id
         var l_optionValue = l_option$.val();
         // is report currently selected one
-        var l_isSelected  = l_option$.is( ":selected" )
+        var l_isSelected  = l_option$.is( ":selected" );
         // extract prefix from old report name
-        var l_textPrefix  = l_optionText.substring( 0, l_optionText.indexOf( ". " ) + 2 )
+        var l_textPrefix  = l_optionText.substring( 0, l_optionText.indexOf( ". " ) + 2 );
+        // old report name without prefix
+        var l_oldText     = l_optionText.substring( l_optionText.indexOf( ". " ) + 2 );
         var l_newText;
         var l_translatedText;
 
@@ -78,7 +80,7 @@ function translateIrReportNames( p_options ){
           if( l_exists ){
 
             // change alternative default controll label to translated name
-            l_control$.text( l_control$.text().replace( l_optionText, l_translatedText ) );
+            l_control$.text( l_control$.text().replace( l_oldText, l_translatedText ) );
 
           } else {
 
@@ -96,22 +98,28 @@ function translateIrReportNames( p_options ){
             );
 
             if( l_exists ){
-              l_control$.text( l_control$.text().replace( l_optionText, l_translatedText ) );
+              l_control$.text( l_control$.text().replace( l_oldText, l_translatedText ) );
             }
 
           }
 
-          // find visually hidden report summary element
-          var l_reportSummaryItem$ = $( l_regionId + "_control_panel_summary" ).find(
-            "li.a-IRR-reportSummary-item--savedReport span.a-IRR-reportSummary-value"
+          // find visually hidden report summary element and
+          // change text to translated report name
+          var l_reportSummaryItem$ = $(
+            l_regionId + "_control_panel_summary li.a-IRR-reportSummary-item--savedReport span.a-IRR-reportSummary-value"
           );
+          l_exists = l_reportSummaryItem$.length === 1;
 
-          // change hidden report summary element text
-          l_reportSummaryItem$.text( l_translatedText );
+          if( l_exists ){
+            l_reportSummaryItem$.text( l_translatedText );
+          }
 
         }
 
       });
+
+      // for align IR header and data columns after changing elements text
+      $(window).trigger( "apexwindowresized" );
 
     // if region is IG
     } else if( l_regionType === "NATIVE_IG" ){
@@ -134,16 +142,13 @@ function translateIrReportNames( p_options ){
         var l_result = apex.server.plugin( l_ajaxIdentifier, {
             // pass region id to process
             x01: l_regionId
-          },{
-            success: function( data ){
-
-              apex.debug.info( l_regionType, "ajax response:", data );
-              // set report names
-              translateIgReportNames( data )
-
-            }
+        },{
+          success: function( data ){
+            apex.debug.info( l_regionType, "ajax response:", data );
+            // set report names
+            translateIgReportNames( data )
           }
-        );
+        });
 
       });
 
@@ -169,7 +174,8 @@ function translateIrReportNames( p_options ){
       var l_optionText  = l_option$.text();
       // report id
       var l_optionValue = l_option$.val();
-      var l_isSelected  = l_option$.is( ":selected" )
+      // is report currently selected one
+      var l_isSelected  = l_option$.is( ":selected" );
       var l_newText;
 
       // find translated report name

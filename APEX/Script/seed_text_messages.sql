@@ -59,7 +59,7 @@ begin
     from apex_appl_page_ig_rpts t1
     where 1 = 1
       and t1.application_id = l_app_id
-      and t1.type = 'ALTERNATIVE'
+      and t1.type in( 'ALTERNATIVE', 'PUBLIC' )
       and t1.static_id is not null
       and t1.name is not null
       and not exists(
