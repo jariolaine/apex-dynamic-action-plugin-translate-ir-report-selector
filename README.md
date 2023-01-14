@@ -1,7 +1,7 @@
 # Translate IR/IG Report Selector
 ![](https://img.shields.io/badge/Plug--in_Type-Dynamic_Action-orange.svg)
-![](https://img.shields.io/badge/Oracle_Database-18c-blue.svg)
-![](https://img.shields.io/badge/APEX-21.1-success.svg)
+![](https://img.shields.io/badge/Oracle_Database-19c-blue.svg)
+![](https://img.shields.io/badge/APEX-22.2-success.svg)
 
 Translate the names of Interactive Report and Interactive Grid saved alternative reports using text messages.
 
@@ -10,12 +10,12 @@ Demo available at [apex.oracle.com](https://apex.oracle.com/pls/apex/jari/r/tran
 ## Usage
 
 ### System Requirements
-* Oracle Database 18c or later
-* Oracle Application Express version 21.1 or later
+* Oracle Database 19c or later
+* Oracle Application Express version 22.2 or later
 
 ### Report Name Translation
 
-Translations of report names should be saved in [text messages](https://docs.oracle.com/en/database/oracle/application-express/21.1/htmdb/translating-messages.html#GUID-3557FD3D-EC89-4F18-91B7-E8E304459266). The name of the text message consists of the prefix *IR_REPORT_ALIAS_* or *IG_REPORT_ALIAS_*, depending on region, and the saved report alias, for example *IR_REPORT_ALIAS_345678*.
+Translations of report names should be saved in [text messages](https://docs.oracle.com/en/database/oracle/apex/22.2/htmdb/translating-messages.html#GUID-3557FD3D-EC89-4F18-91B7-E8E304459266). The name of the text message consists of the prefix *IR_REPORT_ALIAS_* or *IG_REPORT_ALIAS_*, depending on region, and the saved report alias, for example *IR_REPORT_ALIAS_345678*.
 
 #### Seed Text Messages
 

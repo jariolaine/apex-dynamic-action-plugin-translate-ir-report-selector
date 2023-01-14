@@ -40,6 +40,8 @@ as
 -- Private procedures and functions
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
   function get_ig_reports(
     p_app_id            in number,
     p_app_page_id       in number,
@@ -66,7 +68,7 @@ as
           ,'reports'          value json_arrayagg(
             json_object(
               'id'            value to_char( ig.report_id )
-              ,'name'         value apex_lang.message( msg.translatable_message )
+              ,'name'         value msg.message_text
             )
           )
         )
@@ -80,8 +82,14 @@ as
       and ig.page_id = p_app_page_id
       and ig.region_id = p_region_id
       and (
-        ig.session_id = l_session
-        or ig.session_id is null
+        (
+          ig.session_id = l_session
+          and ig.type = 'SESSION'
+        )
+        or (
+          ig.session_id is null
+          and ig.type in( 'ALTERNATIVE', 'PUBLIC' )
+        )
       )
       and msg.application_id = p_app_id
       and msg.language_code = p_lang
@@ -93,9 +101,6 @@ as
     return l_options;
 
   end get_ig_reports;
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
--- Global functions and procedures
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
   function render(
@@ -179,7 +184,7 @@ as
               ,'reports'  value json_arrayagg(
                 json_object(
                   'id'    value to_char( ir.report_id )
-                  ,'name' value apex_lang.message( msg.translatable_message )
+                  ,'name' value msg.message_text
                 )
               )
             )
@@ -189,6 +194,7 @@ as
         join apex_application_translations msg
           on msg.translatable_message = l_ir_mesg_prefix || ir.report_alias
         where 1 = 1
+          and ir.report_type in( 'ALTERNATIVE_DEFAULT', 'PUBLIC' )
           and ir.application_id = l_app_id
           and ir.page_id = l_app_page_id
           and ir.region_id = l_region_id

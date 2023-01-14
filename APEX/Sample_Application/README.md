@@ -1,15 +1,15 @@
 # Sample Application
 
-![](https://img.shields.io/badge/Oracle_Database-18c-blue.svg)
-![](https://img.shields.io/badge/APEX-21.1-success.svg)
+![](https://img.shields.io/badge/Oracle_Database-19c-blue.svg)
+![](https://img.shields.io/badge/APEX-22.2-success.svg)
 
 Plug-in "Translate IR/IG Report Selector" sample application
 
 ## Install
 
 ### System Requirements
-* Oracle database version 18c or later
-* Oracle Application Express version 21.1 or later
+* Oracle database version 19c or later
+* Oracle Application Express version 22.2 or later
 
 ### Needed Privileges
 Ensure target schema associated to your APEX workspace has following system privileges and roles:
